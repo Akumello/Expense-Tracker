@@ -297,7 +297,9 @@ public class Controller implements Initializable
             return false;
         }
         try {
-            Double.parseDouble(add_frequencyInput.getText());
+            if(add_isRecurring.isSelected()) {
+                Double.parseDouble(add_frequencyInput.getText());
+            }
         }
         catch(Exception e) {
             //  Block of code to handle errors
