@@ -85,7 +85,7 @@
                       <Button fx:id="button" layoutX="508.0" layoutY="304.0" mnemonicParsing="false" onAction="#saveButtonAction" text="Camera" />
                       <Button fx:id="clearButton" layoutX="447.0" layoutY="304.0" mnemonicParsing="false" onAction="#clearButtonAction" text="Clear" />
                       <Button fx:id="saveButton" layoutX="387.0" layoutY="304.0" mnemonicParsing="false" onAction="#saveButtonAction" text="Save" />
-                      <Label layoutX="41.0" layoutY="44.0" text="Name:" />
+                      <Label layoutX="41.0" layoutY="66.0" text="Name:" />
                       <Label layoutX="31.0" layoutY="103.0" text="Category:" />
                       <Label layoutX="56.0" layoutY="139.0" text="Cost:" />
                       <Label layoutX="58.0" layoutY="175.0" text="Date:" />
@@ -93,7 +93,7 @@
                       <Label fx:id="add_successfulAdd" layoutX="260.0" layoutY="308.0" text="Successfully added!" textFill="#14d514" visible="false" />
                       <CheckBox fx:id="add_isRecurring" layoutX="163.0" layoutY="205.0" mnemonicParsing="false" onAction="#toggleFrequency" selected="true" />
                       <DatePicker fx:id="add_dateInput" layoutX="97.0" layoutY="171.0" />
-                      <TextField fx:id="add_nameInput" layoutX="97.0" layoutY="40.0" />
+                      <TextField fx:id="add_nameInput" layoutX="96.0" layoutY="62.0" />
                       <TextField fx:id="add_costInput" layoutX="97.0" layoutY="135.0" />
                       <TextField fx:id="add_frequencyInput" layoutX="97.0" layoutY="234.0" />
                       <TextField fx:id="add_categoryInput" layoutX="97.0" layoutY="99.0" onKeyTyped="#categoryAutoFill" />
@@ -101,7 +101,7 @@
                       <TextField fx:id="add_noteInput" layoutX="96.0" layoutY="305.0" prefHeight="26.0" prefWidth="149.0" />
                       <Label layoutX="26.0" layoutY="238.0" text="Frequency:" />
                       <Label fx:id="add_unSuccessfulAdd" layoutX="255.0" layoutY="310.0" text="Could not add item!" textFill="#d41e15" visible="false" />
-                  <Label fx:id="add_frequencyInfo" layoutX="273.0" layoutY="238.0" text="(Days betweeen next occurrence)" />
+                  <Label fx:id="add_frequencyInfo" layoutX="287.0" layoutY="238.0" text="(Days betweeen next occurrence)" />
                   <DatePicker fx:id="add_stopDateInput" layoutX="97.0" layoutY="269.0" />
                   <Label layoutX="29.0" layoutY="273.0" text="Stop Date:" />
                   </children></AnchorPane>
