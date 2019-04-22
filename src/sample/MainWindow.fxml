@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <tabs>
     <Tab text="View">
       <content>
@@ -97,10 +97,13 @@
                       <TextField fx:id="add_costInput" layoutX="97.0" layoutY="135.0" />
                       <TextField fx:id="add_frequencyInput" layoutX="97.0" layoutY="234.0" />
                       <TextField fx:id="add_categoryInput" layoutX="97.0" layoutY="99.0" onKeyTyped="#categoryAutoFill" />
-                      <Label layoutX="54.0" layoutY="278.0" text="Note:" />
-                      <TextField fx:id="add_noteInput" layoutX="97.0" layoutY="274.0" prefHeight="26.0" prefWidth="149.0" />
+                      <Label layoutX="54.0" layoutY="310.0" text="Note:" />
+                      <TextField fx:id="add_noteInput" layoutX="96.0" layoutY="305.0" prefHeight="26.0" prefWidth="149.0" />
                       <Label layoutX="26.0" layoutY="238.0" text="Frequency:" />
                       <Label fx:id="add_unSuccessfulAdd" layoutX="255.0" layoutY="310.0" text="Could not add item!" textFill="#d41e15" visible="false" />
+                  <Label fx:id="add_frequencyInfo" layoutX="273.0" layoutY="238.0" text="(Days betweeen next occurrence)" />
+                  <DatePicker fx:id="add_stopDateInput" layoutX="97.0" layoutY="269.0" />
+                  <Label layoutX="29.0" layoutY="273.0" text="Stop Date:" />
                   </children></AnchorPane>
           </content>
       </Tab>

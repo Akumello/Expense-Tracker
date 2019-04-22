@@ -9,13 +9,14 @@ public class Expense {
     private double cost;
     private String category;
     private Date date;
+    private Date stopDate;
     private String note;
     private boolean isScheduled;
     private long frequency;
     private Date nextOccurrence;
 
     //Constructor
-    public Expense(String name, double cost, String category, Date date, String note) {
+    public Expense(String name, double cost, String category, Date date, Date stopDate, String note) {
         this.name = name;
         this.cost = cost;
         this.category = category;
@@ -23,15 +24,17 @@ public class Expense {
         this.note = note;
         this.isScheduled = false;
         this.frequency = 0;
+        this.stopDate = stopDate;
         this.nextOccurrence = null;
     }
 
     //Constructor for scheduled
-    public Expense(String name, double amount, String category, Date date, String note, long frequency) {
+    public Expense(String name, double amount, String category, Date date, Date stopDate, String note, long frequency) {
         this.name = name;
         this.cost = amount;
         this.category = category;
         this.date = date;
+        this.stopDate = stopDate;
         this.note = note;
         this.isScheduled = true;
         this.frequency = frequency;

@@ -240,6 +240,7 @@ public class Controller implements Initializable
     @FXML private CheckBox add_isRecurring;
     @FXML private Label add_successfulAdd;
     @FXML private Label add_unSuccessfulAdd;
+    @FXML private Label add_frequencyInfo;
 
     ArrayList<String> possibleWords = new ArrayList<String>();
 
@@ -251,10 +252,11 @@ public class Controller implements Initializable
         if(!isThereEmptyFields() && isThereValidFields())
         {
             Date newDate = new Date(add_dateInput.getValue().toEpochDay());
+            Date stopDate = new Date(add_stopDateInput.getValue().toEpochDay());
             if(!add_isRecurring.isSelected())
             {
                 Expense newExpense = new Expense(add_nameInput.getText(), Double.parseDouble(add_costInput.getText()), add_categoryInput.getText(),
-                        newDate, add_noteInput.getText());
+                        newDate, stopDate, add_noteInput.getText());
 
                 expenseList.addExpense(newExpense);
                 possibleWords.add(add_categoryInput.getText());
@@ -265,7 +267,7 @@ public class Controller implements Initializable
             else
             {
                 Expense newExpense = new Expense(add_nameInput.getText(), Double.parseDouble(add_costInput.getText()), add_categoryInput.getText(),
-                        newDate, add_noteInput.getText(), TimeUnit.DAYS.toMillis(Long.parseLong(add_frequencyInput.getText())));
+                        newDate, stopDate, add_noteInput.getText(), TimeUnit.DAYS.toMillis(Long.parseLong(add_frequencyInput.getText())));
 
                 expenseList.addExpense(newExpense);
                 possibleWords.add(add_categoryInput.getText());
@@ -328,10 +330,10 @@ public class Controller implements Initializable
             emptyCostAlert.show();
             return true;
         }
-        if(add_dateInput.getValue() == null)
+        if(add_dateInput.getValue() == null || add_stopDateInput.getValue() == null)
         {
             Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
-            emptyCostAlert.setContentText("Please enter date");
+            emptyCostAlert.setContentText("Please enter valid dates");
             emptyCostAlert.show();
             return true;
         }
@@ -362,10 +364,12 @@ public class Controller implements Initializable
     {
         if(add_isRecurring.isSelected())
         {
+            add_frequencyInfo.setVisible(true);
             add_frequencyInput.setVisible(true);
         }
         else
         {
+            add_frequencyInfo.setVisible(false);
             add_frequencyInput.setVisible(false);
         }
     }
@@ -420,10 +424,10 @@ public class Controller implements Initializable
 
     private void setUpChartByCategory(){
         XYChart.Series set1 = new XYChart.Series();
-        Expense e1 = new Expense("Apple", 1.99, "Food", new Date(), "Golden Delicious");
-        Expense e2 = new Expense("Banana", 2.99, "Food", new Date(), "Fruit Salad");
-        Expense e3 = new Expense("Watermelon", 4.99, "Food", new Date(), "Yummy Yummy");
-        Expense e4 = new Expense("Watermelon", 4.99, "Inorganic", new Date(), "Yummy Yummy");
+        Expense e1 = new Expense("Apple", 1.99, "Food", new Date(), new Date(), "Golden Delicious");
+        Expense e2 = new Expense("Banana", 2.99, "Food", new Date(), new Date(),"Fruit Salad");
+        Expense e3 = new Expense("Watermelon", 4.99, "Food", new Date(),new Date(), "Yummy Yummy");
+        Expense e4 = new Expense("Watermelon", 4.99, "Inorganic", new Date(), new Date(),"Yummy Yummy");
         expenseList.addExpense(e1);
         expenseList.addExpense(e2);
         expenseList.addExpense(e3);
