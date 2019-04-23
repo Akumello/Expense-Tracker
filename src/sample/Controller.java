@@ -296,6 +296,7 @@ public class Controller implements Initializable
                 expenseList.addExpense(newExpense);
                 possibleWords.add(add_categoryInput.getText());
 
+                add_unSuccessfulAdd.setVisible(false);
                 add_successfulAdd.setVisible(true);
                 System.out.println("" + expenseList.toString());
             }
