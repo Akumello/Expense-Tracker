@@ -107,7 +107,7 @@ public class ExpenseList
     public void filterByCategory(String category) {
         filteredList = new FilteredList<>(list, p -> true);
         filteredList.setPredicate(expense -> {
-            if(expense.getCategory().contains(category))
+            if(expense.getCategory().equals(category))
                 return true;
             else
                 return false;
@@ -241,11 +241,24 @@ public class ExpenseList
         }
     }
 
+    public void changeFromRecurring(Expense e){
+        int index = filteredList.indexOf(e);
+        e.setScheduled(false);
+        filteredList.add(index, e);
+    }
+
+    public void addToFiltered(Expense e){
+        filteredList.add(e);
+    }
+
     /*
     public void sortByDate() {
         Collections.sort(list, compareDate);
     }
-
+    public void addToBothLists(Expense e) {
+        list.add(e);
+        filteredList.add(e);
+    }
     public void sortByDateR() {
         Collections.sort(list, compareDate.reversed());
     }
@@ -306,13 +319,6 @@ public class ExpenseList
 
     public void fSortByAmountR() {
         Collections.sort(filteredList, compareAmount.reversed());
-    }
-
-
-
-    public void addToBothLists(Expense e) {
-        list.add(e);
-        filteredList.add(e);
     }
 
   /*

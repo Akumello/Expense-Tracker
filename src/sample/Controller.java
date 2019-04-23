@@ -1,9 +1,7 @@
 package sample;
 import java.net.URL;
-import java.net.URL.*;
-import javafx.beans.Observable;
+
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,28 +16,20 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
 import org.controlsfx.control.textfield.TextFields;
+import org.jetbrains.annotations.NotNull;
 
-import java.time.LocalDate;
 import java.util.ResourceBundle;
-import java.net.URL;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.concurrent.TimeUnit.*;
 
 public class Controller implements Initializable
 {
@@ -48,6 +38,15 @@ public class Controller implements Initializable
     @Override
     public void initialize(URL arg0, ResourceBundle arg1)
     {
+        Expense e1 = new Expense("Apple", 1.99, "Food", new Date(), "Golden Delicious", 10000);
+        Expense e2 = new Expense("Banana", 2.99, "Dood", new Date(), "Fruit Salad");
+        Expense e3 = new Expense("Watermelon", 4.99, "Rood", new Date(), "Yummy Yummy");
+        Expense e4 = new Expense("Water", 39.99, "Inorganic", new Date(), "Yummy Yummy");
+        expenseList.addExpense(e1);
+        expenseList.addExpense(e2);
+        expenseList.addExpense(e3);
+        expenseList.addExpense(e4);
+
         //* Set up options for controls
         ObservableList<String> filterOptions = FXCollections.observableArrayList();
         filterOptions.add("No Filter");
@@ -58,9 +57,6 @@ public class Controller implements Initializable
         filterOptions.add("Recurring");
         view_filterCombo.setItems(filterOptions);
 
-        view_tableView.setEditable(true);
-        // Load expenseList from save data
-
         // Set the factory values for each entry
         // These will ensure that the each field in an expense will map to the correct column
         view_nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -69,11 +65,11 @@ public class Controller implements Initializable
         view_dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         view_noteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
 
+
         // Prompt for user/password
         // Load the appropriate expenseList from save data
-
         updateTable();
-
+        startUpdater();
     }
 
     //*/ Michael
@@ -99,11 +95,6 @@ public class Controller implements Initializable
     @FXML TextField view_filterName;
     @FXML TextField view_filterCategory;
     @FXML CheckBox view_filterRecur;
-
-    @FXML
-    private Button view_deleteButton;
-    @FXML
-    private Button view_deleteAllButton;
 
     @FXML
     public void updateTable()
@@ -133,26 +124,7 @@ public class Controller implements Initializable
             view_tableView.setItems(expenseList.getFilteredList());
         else
             view_tableView.setItems(expenseList.getList());
-
-        setUpChartByCategory();
-    }
-
-    @FXML
-    private void deleteItem()
-    {
-        try {
-            Expense itemToDelete = view_tableView.getSelectionModel().getSelectedItem();
-
-            view_tableView.getItems().remove(view_tableView.getSelectionModel().getSelectedIndex());
-
-            System.out.println(expenseList.toString());
-        }
-        catch (Exception e)
-        {
-            Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
-            emptyCostAlert.setContentText("You must select an item to delete");
-            emptyCostAlert.show();
-        }
+        updateChartByCategory();
     }
 
 
@@ -206,7 +178,7 @@ public class Controller implements Initializable
         if(view_filterStartDate == null && view_filterEndDate == null)
             return;
 
-        // Get the start and end dates from the datepicker control, then filter with them
+        // Get the start and end dates from the datePicker control, then filter with them
         Date start = java.sql.Date.valueOf(view_filterStartDate.getValue());
         Date end = java.sql.Date.valueOf(view_filterEndDate.getValue());
         expenseList.filterByDate(start, end);
@@ -266,7 +238,6 @@ public class Controller implements Initializable
     @FXML private CheckBox add_isRecurring;
     @FXML private Label add_successfulAdd;
     @FXML private Label add_unSuccessfulAdd;
-    @FXML private Label add_frequencyInfo;
 
     ArrayList<String> possibleWords = new ArrayList<String>();
 
@@ -277,33 +248,22 @@ public class Controller implements Initializable
     {
         if(!isThereEmptyFields() && isThereValidFields())
         {
-            LocalDate localDate = add_dateInput.getValue();
-            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-            Date newDate = Date.from(instant);
-
-            localDate = add_stopDateInput.getValue();
-            instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-            Date stopDate = Date.from(instant);
-
-           // Date newDate = new Date(add_dateInput.getValue().toEpochDay());
-            //Date stopDate = new Date(add_stopDateInput.getValue().toEpochDay());
-
+            Date newDate = new Date(add_dateInput.getValue().toEpochDay());
             if(!add_isRecurring.isSelected())
             {
                 Expense newExpense = new Expense(add_nameInput.getText(), Double.parseDouble(add_costInput.getText()), add_categoryInput.getText(),
-                        newDate, stopDate, add_noteInput.getText());
+                        newDate, add_noteInput.getText());
 
                 expenseList.addExpense(newExpense);
                 possibleWords.add(add_categoryInput.getText());
 
-                add_unSuccessfulAdd.setVisible(false);
                 add_successfulAdd.setVisible(true);
                 System.out.println("" + expenseList.toString());
             }
             else
             {
                 Expense newExpense = new Expense(add_nameInput.getText(), Double.parseDouble(add_costInput.getText()), add_categoryInput.getText(),
-                        newDate, stopDate, add_noteInput.getText(), TimeUnit.DAYS.toMillis(Long.parseLong(add_frequencyInput.getText())));
+                        newDate, add_noteInput.getText(), TimeUnit.DAYS.toMillis(Long.parseLong(add_frequencyInput.getText())));
 
                 expenseList.addExpense(newExpense);
                 possibleWords.add(add_categoryInput.getText());
@@ -319,6 +279,7 @@ public class Controller implements Initializable
             add_successfulAdd.setVisible(false);
             add_unSuccessfulAdd.setVisible(true);
         }
+        updateTable();
     }
 
     private boolean isThereValidFields()
@@ -335,9 +296,7 @@ public class Controller implements Initializable
             return false;
         }
         try {
-            if(add_isRecurring.isSelected()) {
-                Double.parseDouble(add_frequencyInput.getText());
-            }
+            Double.parseDouble(add_frequencyInput.getText());
         }
         catch(Exception e) {
             //  Block of code to handle errors
@@ -366,10 +325,10 @@ public class Controller implements Initializable
             emptyCostAlert.show();
             return true;
         }
-        if(add_dateInput.getValue() == null || add_stopDateInput.getValue() == null)
+        if(add_dateInput.getValue() == null)
         {
             Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
-            emptyCostAlert.setContentText("Please enter valid dates");
+            emptyCostAlert.setContentText("Please enter date");
             emptyCostAlert.show();
             return true;
         }
@@ -396,22 +355,14 @@ public class Controller implements Initializable
     }
 
     @FXML
-    public void testFunction()
-    {
-        System.out.println("HELLO!");
-    }
-
-    @FXML
     private void toggleFrequency()
     {
         if(add_isRecurring.isSelected())
         {
-            add_frequencyInfo.setVisible(true);
             add_frequencyInput.setVisible(true);
         }
         else
         {
-            add_frequencyInfo.setVisible(false);
             add_frequencyInput.setVisible(false);
         }
     }
@@ -431,67 +382,76 @@ public class Controller implements Initializable
         TextFields.bindAutoCompletion(add_categoryInput, possibleWords);
     }
 
+
+    //*/ End Genesis
+    //NOW ITS JIMMY
+
     private void updateScheduledExpenses(){
-        Expense e;
+        Expense hold, e;
         expenseList.filterByRecurring(true);
         for(int i = 0; i < expenseList.getFilteredList().size(); i++){
-            if(expenseList.getFilteredList().get(i).needsUpdate()){
-               // e = new Expense(expenseList.getFilteredList().get(i).getName(),expenseList.getFilteredList().get(i).getCost(),
-                        //expenseList.getFilteredList().get(i).getCategory(),expenseList.getFilteredList().get(i).getNextOccurrence(),expenseList.getFilteredList().get(i).getFrequency());
+            hold = expenseList.getFilteredList().get(i);
+            if(hold.needsUpdate()){
                 //Need function that puts lets user confirm stuff
-                //expenseList.addToBothLists(e);
+                e = new Expense(hold.getName(), hold.getCost(), hold.getCategory(), hold.getDate(), hold.getNote(), hold.getFrequency());
+                //setAddPaneFields(hold);
+                expenseList.addToFiltered(e);
+                expenseList.changeFromRecurring(hold);
             }
         }
     }
 
+    @FXML TabPane tabPane;
+    @FXML Tab addPane;
+    @FXML Tab viewPane;
+    @FXML Tab graphPane;
+    @FXML Tab settingsPane;
+    private  SingleSelectionModel<Tab> tabSelector;
+
     private final ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(1);
 
-    public void startUpdateFiveSeconds(){
+    public void startUpdater(){
 
         final Runnable updater = new Runnable(){
             public void run(){
                 //Stuff we want to happen every 5 seconds goes here
-                updateScheduledExpenses();
+                System.out.println("struggle");
+                //updateScheduledExpenses();
             }};
         final ScheduledFuture<?> updaterHandle = scheduler.scheduleAtFixedRate(updater, 5, 5, SECONDS);
     }
-    //*/ End Genesis
 
 
     //* Graphics pane content: Jimmy
-    @FXML   private BarChart<?,?> expenseChart;
+    @FXML   private BarChart<String, Double> expenseChart;
     @FXML   private CategoryAxis x;
     @FXML   private NumberAxis y;
     @FXML   private Text total;
 
-    private void setUpChartByCategory(){
-        XYChart.Series set1 = new XYChart.Series();
-        Expense e1 = new Expense("Apple", 1.99, "Food", new Date(), new Date(), "Golden Delicious");
-        Expense e2 = new Expense("Banana", 2.99, "Food", new Date(), new Date(),"Fruit Salad");
-        Expense e3 = new Expense("Watermelon", 4.99, "Food", new Date(),new Date(), "Yummy Yummy");
-        Expense e4 = new Expense("Watermelon", 4.99, "Inorganic", new Date(), new Date(),"Yummy Yummy");
-        expenseList.addExpense(e1);
-        expenseList.addExpense(e2);
-        expenseList.addExpense(e3);
-        expenseList.addExpense(e4);
+    private void updateChartByCategory(){
+        expenseChart.getData().clear();
+        XYChart.Series<String, Double> set = new XYChart.Series<>();
         ArrayList<String> categoriesThatHaveAlreadyBeenComputed = new ArrayList<>();
         double sumOfSums = 0;
-        for(int o = 0; o < expenseList.getSize(); o++)
+        for(int o = 0; o < expenseList.getList().size(); o++)
         {
-            if (!(categoriesThatHaveAlreadyBeenComputed.contains(expenseList.getExpense(o).getCategory()))){
+            if (! (categoriesThatHaveAlreadyBeenComputed.equals(expenseList.getList().get(o).getCategory()) )){
                 expenseList.filterByCategory(expenseList.getExpense(o).getCategory());
                 double sum = 0;
                 for (int m = 0; m < expenseList.getFilteredList().size(); m++){
                     sum += expenseList.getFilteredList().get(m).getCost();
                 }
                 sumOfSums += sum;
-                set1.getData().add(new XYChart.Data(expenseList.getExpense(o).getCategory(), sum));
+                set.getData().add(new XYChart.Data<>(expenseList.getExpense(o).getCategory(), sum));
                 categoriesThatHaveAlreadyBeenComputed.add(expenseList.getExpense(o).getCategory());
+                System.out.println(sum);
             }
-
+            System.out.println(expenseList.toString());
+            System.out.println(categoriesThatHaveAlreadyBeenComputed.toString());
         }
+        expenseChart.getData().addAll(set);
         total.setText("$" + sumOfSums);
-        expenseChart.getData().addAll(set1);
+        expenseList.clearFilter();
     }
     //*/ End Jimmy
 }
