@@ -6,6 +6,7 @@ import javafx.collections.transformation.FilteredList;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.io.*;
 
 public class ExpenseList
 {
@@ -171,6 +172,73 @@ public class ExpenseList
                 filteredList.add(getList().get(i));
             }
         }//*/
+    }
+
+    /**
+     * Calculates the total cost of the user's expenses.
+     * @return The total dollar amount of expenses
+     */
+    public double calculateTotalExpenses() {
+        double total_cost = 0.00; //initializes total cost as $0.00
+
+        for (int i = 0; i < getSize(); i++) { //for each expense in the expense list
+            total_cost += getExpense(i).getCost(); //add each amount to the total cost
+        }
+
+        return total_cost;
+    }
+
+    /**
+     * Saves the user's data to an external file.
+     *
+     * @param fileName String representation of the file name
+     */
+    public void saveUserData(String fileName) throws FileNotFoundException {
+        PrintWriter pw = new PrintWriter(new FileOutputStream(fileName)); //writes data to a file
+
+        for (int i = 0; i < getSize(); i++) {
+            System.out.println("Expense #" + (i+1) + ": "); //prints what number the expense is in the list
+            pw.println(getExpense(i).getName()); //then prints its data
+            pw.println(getExpense(i).getCost());
+            pw.println(getExpense(i).getCategory());
+            pw.println(getExpense(i).getDate());
+            pw.println(getExpense(i).getNote());
+            System.out.println();
+        }
+
+        pw.close();
+    }
+
+    /**
+     * Loads the user's data from an external file.
+     *
+     * @param fileName String representation of the file name
+     */
+    public void loadUserData(String fileName) throws FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader("file.txt"));
+
+        try {
+            StringBuilder sb = new StringBuilder();
+
+            String line = "";
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+
+                // Added try for unhandled exception
+                try {
+                    line = br.readLine();
+                }
+                catch(Exception ex){}
+            }
+
+            String everything = sb.toString();
+        } finally {
+            // Added try for unhandled exception
+            try {
+                br.close();
+            } catch(Exception ex){}
+        }
     }
 
     /*
