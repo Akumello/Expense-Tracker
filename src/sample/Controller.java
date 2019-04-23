@@ -18,7 +18,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 import javafx.collections.ObservableList;
@@ -273,8 +275,17 @@ public class Controller implements Initializable
     {
         if(!isThereEmptyFields() && isThereValidFields())
         {
-            Date newDate = new Date(add_dateInput.getValue().toEpochDay());
-            Date stopDate = new Date(add_stopDateInput.getValue().toEpochDay());
+            LocalDate localDate = add_dateInput.getValue();
+            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            Date newDate = Date.from(instant);
+
+            localDate = add_stopDateInput.getValue();
+            instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            Date stopDate = Date.from(instant);
+
+           // Date newDate = new Date(add_dateInput.getValue().toEpochDay());
+            //Date stopDate = new Date(add_stopDateInput.getValue().toEpochDay());
+
             if(!add_isRecurring.isSelected())
             {
                 Expense newExpense = new Expense(add_nameInput.getText(), Double.parseDouble(add_costInput.getText()), add_categoryInput.getText(),
