@@ -134,7 +134,7 @@ public class Controller implements Initializable
         else
             view_tableView.setItems(expenseList.getList());
 
-        updateChartByCategory();
+        setUpChartByCategory();
     }
 
     @FXML
@@ -319,8 +319,6 @@ public class Controller implements Initializable
             add_successfulAdd.setVisible(false);
             add_unSuccessfulAdd.setVisible(true);
         }
-
-        updateTable();
     }
 
     private boolean isThereValidFields()
@@ -433,9 +431,6 @@ public class Controller implements Initializable
         TextFields.bindAutoCompletion(add_categoryInput, possibleWords);
     }
 
-
-    //*/ End Genesis
-
     private void updateScheduledExpenses(){
         Expense e;
         expenseList.filterByRecurring(true);
@@ -444,10 +439,7 @@ public class Controller implements Initializable
                // e = new Expense(expenseList.getFilteredList().get(i).getName(),expenseList.getFilteredList().get(i).getCost(),
                         //expenseList.getFilteredList().get(i).getCategory(),expenseList.getFilteredList().get(i).getNextOccurrence(),expenseList.getFilteredList().get(i).getFrequency());
                 //Need function that puts lets user confirm stuff
-                e = new Expense(hold.getName(), hold.getCost(), hold.getCategory(), hold.getDate(), hold.getStopDate(), hold.getNote(), hold.getFrequency());
-                //setAddPaneFields(hold);
-                expenseList.addToFiltered(e);
-                expenseList.changeFromRecurring(hold);
+                //expenseList.addToBothLists(e);
             }
         }
     }
@@ -464,7 +456,6 @@ public class Controller implements Initializable
         final ScheduledFuture<?> updaterHandle = scheduler.scheduleAtFixedRate(updater, 5, 5, SECONDS);
     }
     //*/ End Genesis
-
 
 
     //* Graphics pane content: Jimmy
@@ -502,5 +493,5 @@ public class Controller implements Initializable
         total.setText("$" + sumOfSums);
         expenseChart.getData().addAll(set1);
     }
-    // End Jimmy
+    //*/ End Jimmy
 }
