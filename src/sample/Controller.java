@@ -1,9 +1,7 @@
 package sample;
 import java.net.URL;
-import java.net.URL.*;
-import javafx.beans.Observable;
+
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,17 +21,11 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
 import org.controlsfx.control.textfield.TextFields;
 
-import java.time.LocalDate;
 import java.util.ResourceBundle;
-import java.net.URL;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -134,7 +126,7 @@ public class Controller implements Initializable
         else
             view_tableView.setItems(expenseList.getList());
 
-        setUpChartByCategory();
+        updateChartByCategory();
     }
 
     @FXML
@@ -319,6 +311,8 @@ public class Controller implements Initializable
             add_successfulAdd.setVisible(false);
             add_unSuccessfulAdd.setVisible(true);
         }
+
+        updateTable();
     }
 
     private boolean isThereValidFields()
@@ -431,67 +425,76 @@ public class Controller implements Initializable
         TextFields.bindAutoCompletion(add_categoryInput, possibleWords);
     }
 
+
+    //*/ End Genesis
+
     private void updateScheduledExpenses(){
-        Expense e;
+        Expense hold, e;
         expenseList.filterByRecurring(true);
         for(int i = 0; i < expenseList.getFilteredList().size(); i++){
-            if(expenseList.getFilteredList().get(i).needsUpdate()){
-               // e = new Expense(expenseList.getFilteredList().get(i).getName(),expenseList.getFilteredList().get(i).getCost(),
-                        //expenseList.getFilteredList().get(i).getCategory(),expenseList.getFilteredList().get(i).getNextOccurrence(),expenseList.getFilteredList().get(i).getFrequency());
+            hold = expenseList.getFilteredList().get(i);
+            if(hold.needsUpdate()){
                 //Need function that puts lets user confirm stuff
-                //expenseList.addToBothLists(e);
+                e = new Expense(hold.getName(), hold.getCost(), hold.getCategory(), hold.getDate(), hold.getStopDate(), hold.getNote(), hold.getFrequency());
+                //setAddPaneFields(hold);
+                expenseList.addToFiltered(e);
+                expenseList.changeFromRecurring(hold);
             }
         }
     }
 
+    @FXML TabPane tabPane;
+    @FXML Tab addPane;
+    @FXML Tab viewPane;
+    @FXML Tab graphPane;
+    @FXML Tab settingsPane;
+    private  SingleSelectionModel<Tab> tabSelector;
+
     private final ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(1);
 
-    public void startUpdateFiveSeconds(){
+    public void startUpdater(){
 
         final Runnable updater = new Runnable(){
             public void run(){
                 //Stuff we want to happen every 5 seconds goes here
-                updateScheduledExpenses();
+                System.out.println("struggle");
+                //updateScheduledExpenses();
             }};
         final ScheduledFuture<?> updaterHandle = scheduler.scheduleAtFixedRate(updater, 5, 5, SECONDS);
     }
-    //*/ End Genesis
+
 
 
     //* Graphics pane content: Jimmy
-    @FXML   private BarChart<?,?> expenseChart;
+    @FXML   private BarChart<String, Double> expenseChart;
     @FXML   private CategoryAxis x;
     @FXML   private NumberAxis y;
     @FXML   private Text total;
 
-    private void setUpChartByCategory(){
-        XYChart.Series set1 = new XYChart.Series();
-        Expense e1 = new Expense("Apple", 1.99, "Food", new Date(), new Date(), "Golden Delicious");
-        Expense e2 = new Expense("Banana", 2.99, "Food", new Date(), new Date(),"Fruit Salad");
-        Expense e3 = new Expense("Watermelon", 4.99, "Food", new Date(),new Date(), "Yummy Yummy");
-        Expense e4 = new Expense("Watermelon", 4.99, "Inorganic", new Date(), new Date(),"Yummy Yummy");
-        expenseList.addExpense(e1);
-        expenseList.addExpense(e2);
-        expenseList.addExpense(e3);
-        expenseList.addExpense(e4);
+    private void updateChartByCategory(){
+        expenseChart.getData().clear();
+        XYChart.Series<String, Double> set = new XYChart.Series<>();
         ArrayList<String> categoriesThatHaveAlreadyBeenComputed = new ArrayList<>();
         double sumOfSums = 0;
-        for(int o = 0; o < expenseList.getSize(); o++)
+        for(int o = 0; o < expenseList.getList().size(); o++)
         {
-            if (!(categoriesThatHaveAlreadyBeenComputed.contains(expenseList.getExpense(o).getCategory()))){
+            if (! (categoriesThatHaveAlreadyBeenComputed.equals(expenseList.getList().get(o).getCategory()) )){
                 expenseList.filterByCategory(expenseList.getExpense(o).getCategory());
                 double sum = 0;
                 for (int m = 0; m < expenseList.getFilteredList().size(); m++){
                     sum += expenseList.getFilteredList().get(m).getCost();
                 }
                 sumOfSums += sum;
-                set1.getData().add(new XYChart.Data(expenseList.getExpense(o).getCategory(), sum));
+                set.getData().add(new XYChart.Data<>(expenseList.getExpense(o).getCategory(), sum));
                 categoriesThatHaveAlreadyBeenComputed.add(expenseList.getExpense(o).getCategory());
+                System.out.println(sum);
             }
-
+            System.out.println(expenseList.toString());
+            System.out.println(categoriesThatHaveAlreadyBeenComputed.toString());
         }
+        expenseChart.getData().addAll(set);
         total.setText("$" + sumOfSums);
-        expenseChart.getData().addAll(set1);
+        expenseList.clearFilter();
     }
-    //*/ End Jimmy
+    // End Jimmy
 }
