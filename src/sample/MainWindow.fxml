@@ -39,7 +39,10 @@
                         <AnchorPane prefHeight="55.0" prefWidth="120.0" />
                         <AnchorPane prefHeight="55.0" prefWidth="120.0" />
                         <AnchorPane prefHeight="55.0" prefWidth="120.0" />
-                        <AnchorPane layoutX="250.0" layoutY="10.0" prefHeight="55.0" prefWidth="120.0" />
+                        <AnchorPane layoutX="250.0" layoutY="10.0" prefHeight="55.0" prefWidth="120.0">
+                           <children>
+                              <Button fx:id="view_deleteButton" layoutY="15.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="26.0" prefWidth="80.0" text="Delete" />
+                           </children></AnchorPane>
                         <AnchorPane layoutX="250.0" layoutY="10.0" prefHeight="55.0" prefWidth="120.0" />
                      </children>
                   </HBox>

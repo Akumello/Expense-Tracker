@@ -55,8 +55,7 @@ public class Controller implements Initializable
         filterOptions.add("Date");
         filterOptions.add("Recurring");
         view_filterCombo.setItems(filterOptions);
-
-
+        view_tableView.setEditable(true);
         // Load expenseList from save data
 
         updateTable();
@@ -88,6 +87,11 @@ public class Controller implements Initializable
     @FXML TextField view_filterName;
     @FXML TextField view_filterCategory;
     @FXML CheckBox view_filterRecur;
+
+    @FXML
+    private Button view_deleteButton;
+    @FXML
+    private Button view_deleteAllButton;
 
     @FXML
     public void updateTable()
@@ -122,6 +126,24 @@ public class Controller implements Initializable
         //*/
 
         view_tableView.setItems(expenseList.getList());
+    }
+
+    @FXML
+    private void deleteItem()
+    {
+        try {
+            Expense itemToDelete = view_tableView.getSelectionModel().getSelectedItem();
+
+            view_tableView.getItems().remove(view_tableView.getSelectionModel().getSelectedIndex());
+
+            System.out.println(expenseList.toString());
+        }
+        catch (Exception e)
+        {
+            Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
+            emptyCostAlert.setContentText("You must select an item to delete");
+            emptyCostAlert.show();
+        }
     }
 
 
@@ -357,6 +379,12 @@ public class Controller implements Initializable
         }
 
         return false;
+    }
+
+    @FXML
+    public void testFunction()
+    {
+        System.out.println("HELLO!");
     }
 
     @FXML
