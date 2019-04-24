@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
 import java.util.*;
+import java.text.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.io.*;
 
@@ -205,6 +206,11 @@ public class ExpenseList
             pw.println(getExpense(i).getCategory());
             pw.println(getExpense(i).getDate());
             pw.println(getExpense(i).getNote());
+
+            if(getExpense(i).isScheduled()){
+                pw.println(getExpense(i).getFrequency());
+                pw.println(getExpense(i).getStopDate());
+            }
         }
 
         pw.close();
@@ -231,17 +237,22 @@ public class ExpenseList
                 String name = input.readLine();
                 double cost = Double.valueOf(input.readLine());
                 String category = input.readLine();
-                Date date = java.sql.Date.valueOf(input.readLine());
+
+                DateFormat dateFormat = new SimpleDateFormat("E MMM dd hh:mm:ss ZZZ yyyy");
+
+                Date date = dateFormat.parse(input.readLine());
+                Date endDate = null;
                 String note = input.readLine();
                 long frequency = 0;
                 if (recurring)
                 {
                     frequency = Long.valueOf(input.readLine());
+                    endDate = dateFormat.parse(input.readLine());
                 }
 
                 Expense expense;
                 if (recurring)
-                    expense = new Expense(name, cost, category, date, date, note, frequency);
+                    expense = new Expense(name, cost, category, date, endDate, note, frequency);
                 else
                     expense = new Expense(name, cost, category, date, date, note);
 
@@ -250,7 +261,9 @@ public class ExpenseList
 
             input.close();
         }
-        catch(Exception ex){}
+        catch(Exception ex){
+            System.out.println("There was a problem reading the file");
+        }
     }
 
     public void changeFromRecurring(int i){
