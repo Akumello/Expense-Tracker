@@ -493,8 +493,6 @@ public class Controller implements Initializable
         }
     }
 
-    @FXML TabPane tabPane;
-    @FXML Tab addPane;
     @FXML Tab viewPane;
     @FXML Tab graphPane;
     @FXML Tab settingsPane;
