@@ -194,16 +194,17 @@ public class ExpenseList
      * @param fileName String representation of the file name
      */
     public void saveUserData(String fileName) throws FileNotFoundException {
-        PrintWriter pw = new PrintWriter(new FileOutputStream(fileName)); //writes data to a file
+        PrintWriter pw = new PrintWriter(new FileOutputStream(fileName + ".txt")); //writes data to a file
+
+        pw.println(getSize());
 
         for (int i = 0; i < getSize(); i++) {
-            System.out.println("Expense #" + (i+1) + ": "); //prints what number the expense is in the list
+            pw.println(getExpense(i).isScheduled());
             pw.println(getExpense(i).getName()); //then prints its data
             pw.println(getExpense(i).getCost());
             pw.println(getExpense(i).getCategory());
             pw.println(getExpense(i).getDate());
             pw.println(getExpense(i).getNote());
-            System.out.println();
         }
 
         pw.close();
@@ -211,34 +212,40 @@ public class ExpenseList
 
     /**
      * Loads the user's data from an external file.
-     *
-     * @param fileName String representation of the file name
      */
-    public void loadUserData(String fileName) throws FileNotFoundException {
-        BufferedReader br = new BufferedReader(new FileReader("file.txt"));
-
+    public void loadUserData(String user)
+    {
+        clear();
+        BufferedReader input = null;
         try {
-            StringBuilder sb = new StringBuilder();
+            input = new BufferedReader(new FileReader(user + ".txt"));
+        } catch (Exception ex){}
 
-            String line = "";
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
+        try
+        {
+            int expenseCount = Integer.valueOf(input.readLine());
+            for (int i = 0; i < expenseCount; i++)
+            {
+                boolean recurring = Boolean.valueOf(input.readLine());
+                String name = input.readLine();
+                double cost = Double.valueOf(input.readLine());
+                String category = input.readLine();
+                Date date = java.sql.Date.valueOf(input.readLine());
+                String note = input.readLine();
+                long frequency = 0;
+                if (recurring)
+                    frequency = Long.valueOf(input.readLine());
 
-                // Added try for unhandled exception
-                try {
-                    line = br.readLine();
-                }
-                catch(Exception ex){}
+                Expense expense;
+                if (recurring)
+                    expense = new Expense(name, cost, category, date, date, note, frequency);
+                else
+                    expense = new Expense(name, cost, category, date, date, note);
             }
 
-            String everything = sb.toString();
-        } finally {
-            // Added try for unhandled exception
-            try {
-                br.close();
-            } catch(Exception ex){}
+            input.close();
         }
+        catch(Exception ex){}
     }
 
     public void changeFromRecurring(int i){
