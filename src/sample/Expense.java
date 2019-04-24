@@ -2,6 +2,7 @@ package sample;
 
 import java.util.*;
 import java.lang.*;
+import java.util.concurrent.TimeUnit;
 
 public class Expense {
 
@@ -113,6 +114,9 @@ public class Expense {
 
     public long getFrequency() {
         return frequency;
+    }
+    public long getDisplayFrequency() {
+        return TimeUnit.MILLISECONDS.toDays(frequency);
     }
 
     public void setFrequency(long frequency) {

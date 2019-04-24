@@ -65,6 +65,8 @@ public class Controller implements Initializable
         view_categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         view_dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         view_noteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
+        view_endDateColumn.setCellValueFactory(new PropertyValueFactory<>("stopDate"));
+        view_freqColumn.setCellValueFactory(new PropertyValueFactory<>("displayFrequency"));
 
         // Prompt for user/password
         // Load the appropriate expenseList from save data
@@ -78,7 +80,9 @@ public class Controller implements Initializable
     @FXML TableColumn<Expense, Double> view_amountColumn;
     @FXML TableColumn<Expense, String> view_categoryColumn;
     @FXML TableColumn<Expense, String> view_dateColumn;
+    @FXML TableColumn<Expense, String> view_endDateColumn;
     @FXML TableColumn<Expense, String> view_noteColumn;
+    @FXML TableColumn<Expense, Long> view_freqColumn;
 
     @FXML ComboBox<String> view_filterCombo;
 
@@ -367,9 +371,10 @@ public class Controller implements Initializable
             add_frequencyInput.setText(Long.toString(TimeUnit.MILLISECONDS.toDays(itemToEdit.getFrequency())));
 
             // END DATE
-            add_stopDateInput.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            add_stopDateInput.setValue(endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         }
 
+        updateTable();
     }
 
     @FXML
