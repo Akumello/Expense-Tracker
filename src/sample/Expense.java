@@ -16,8 +16,8 @@ public class Expense {
     private long frequency;
     private Date nextOccurrence;
 
-    //Constructor
-    public Expense(String name, double cost, String category, Date date, Date stopDate, String note) {
+    //Constructor for one time expenses
+    public Expense(String name, double cost, String category, Date date, String note) {
         this.name = name;
         this.cost = cost;
         this.category = category;
@@ -25,11 +25,11 @@ public class Expense {
         this.note = note;
         this.isScheduled = false;
         this.frequency = 0;
-        this.stopDate = stopDate;
+        this.stopDate = null;
         this.nextOccurrence = null;
     }
 
-    //Constructor for scheduled
+    //Constructor for scheduled expenses
     public Expense(String name, double amount, String category, Date date, Date stopDate, String note, long frequency) {
         this.name = name;
         this.cost = amount;
@@ -42,7 +42,6 @@ public class Expense {
         this.nextOccurrence = new Date(date.getTime() + frequency);
     }
 
-    //for not scheduled
     public String getName() {
         return name;
     }
@@ -89,6 +88,9 @@ public class Expense {
     public boolean isScheduled(){
         return this.isScheduled;
     }
+    public void setScheduled(boolean scheduled) {
+        this.isScheduled = scheduled;
+    }
 
     @Override
     public String toString() {
@@ -107,7 +109,6 @@ public class Expense {
     public Date getNextOccurrence() {
         return nextOccurrence;
     }
-
     public void setNextOccurrence(Date nextOccurrence) {
         this.nextOccurrence = nextOccurrence;
     }
@@ -115,15 +116,11 @@ public class Expense {
     public long getFrequency() {
         return frequency;
     }
-    public long getDisplayFrequency() {
-        return TimeUnit.MILLISECONDS.toDays(frequency);
-    }
-
     public void setFrequency(long frequency) {
         this.frequency = frequency;
     }
 
-    public void setScheduled(boolean scheduled) {
-        this.isScheduled = scheduled;
+    public long getDisplayFrequency() {
+        return TimeUnit.MILLISECONDS.toDays(frequency);
     }
 }

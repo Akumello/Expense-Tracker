@@ -368,6 +368,7 @@ public class Controller implements Initializable
 
         if(itemToEdit.isScheduled())
         {
+            add_isRecurring.setSelected(true);
             add_frequencyInput.setText(Long.toString(TimeUnit.MILLISECONDS.toDays(itemToEdit.getFrequency())));
 
             // END DATE
@@ -380,46 +381,46 @@ public class Controller implements Initializable
     @FXML
     private void saveButtonAction(ActionEvent event)
     {
+        // Only perform the save action if the required fields in the form are filled out and contain valid info
         if(!isThereEmptyFields() && isThereValidFields())
         {
+            // Convert localDate input to util.Date for the start date
             LocalDate localDate = add_dateInput.getValue();
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-            Date newDate = Date.from(instant);
+            Date startDate = Date.from(instant);
 
+            // Convert localDate input to util.Date for the end date
             localDate = add_stopDateInput.getValue();
             instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             Date stopDate = Date.from(instant);
 
-            // Date newDate = new Date(add_dateInput.getValue().toEpochDay());
-            //Date stopDate = new Date(add_stopDateInput.getValue().toEpochDay());
-
+            // Add an the correct type of expense to the expense list
             if(!add_isRecurring.isSelected())
             {
                 Expense newExpense = new Expense(add_nameInput.getText(), Double.parseDouble(add_costInput.getText()), add_categoryInput.getText(),
-                        newDate, stopDate, add_noteInput.getText());
+                        startDate, add_noteInput.getText());
 
                 expenseList.addExpense(newExpense);
-                possibleWords.add(add_categoryInput.getText());
-
                 add_unSuccessfulAdd.setVisible(false);
                 add_successfulAdd.setVisible(true);
                 System.out.println("" + expenseList.toString());
+
+                // For the search feature
+                possibleWords.add(add_categoryInput.getText());
             }
             else
             {
                 Expense newExpense = new Expense(add_nameInput.getText(), Double.parseDouble(add_costInput.getText()), add_categoryInput.getText(),
-                        newDate, stopDate, add_noteInput.getText(), TimeUnit.DAYS.toMillis(Long.parseLong(add_frequencyInput.getText())));
+                        startDate, stopDate, add_noteInput.getText(), TimeUnit.DAYS.toMillis(Long.parseLong(add_frequencyInput.getText())));
 
                 expenseList.addExpense(newExpense);
-                possibleWords.add(add_categoryInput.getText());
-
                 add_unSuccessfulAdd.setVisible(false);
                 add_successfulAdd.setVisible(true);
                 //timer.schedule(displaySuccessful, 5001);
                 System.out.println("" + expenseList.toString());
-            }
 
-            updateTable();
+                possibleWords.add(add_categoryInput.getText());
+            }
         }
         else
         {
@@ -430,6 +431,7 @@ public class Controller implements Initializable
         updateTable();
     }
 
+    // Verifies that the filled out fields are valid
     private boolean isThereValidFields()
     {
         double returnVal = 0;
@@ -458,8 +460,10 @@ public class Controller implements Initializable
         return true;
     }
 
+    // Verifies that the correct fields are filled out
     private boolean isThereEmptyFields()
     {
+        // Verify that the cost input is filled out
         if(add_costInput.getText() == null || add_costInput.getText().trim().isEmpty())
         {
             Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
@@ -468,6 +472,7 @@ public class Controller implements Initializable
             return true;
         }
 
+        // Verify that the name input is filled out
         if(add_nameInput.getText() == null || add_costInput.getText().trim().isEmpty())
         {
             Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
@@ -475,13 +480,17 @@ public class Controller implements Initializable
             emptyCostAlert.show();
             return true;
         }
-        if(add_dateInput.getValue() == null || add_stopDateInput.getValue() == null)
+
+        // Verify that the date input is filled out
+        if(add_dateInput.getValue() == null)
         {
             Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
             emptyCostAlert.setContentText("Please enter valid dates");
             emptyCostAlert.show();
             return true;
         }
+
+        // Verify that the category input is filled out
         if(add_categoryInput.getText() == null || add_costInput.getText().trim().isEmpty())
         {
             Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
@@ -489,25 +498,27 @@ public class Controller implements Initializable
             emptyCostAlert.show();
             return true;
         }
-        if(add_isRecurring.isSelected() && add_frequencyInput.getText() == null || add_costInput.getText().trim().isEmpty())
-        {
-            Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
-            emptyCostAlert.setContentText("Please enter frequency");
-            emptyCostAlert.show();
-            return true;
+
+        // Verify that the frequency and stop date inputs are filled out
+        if(add_isRecurring.isSelected()) {
+            if (add_frequencyInput.getText() == null || add_costInput.getText().trim().isEmpty()) {
+                Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
+                emptyCostAlert.setContentText("Please enter frequency");
+                emptyCostAlert.show();
+                return true;
+            }
+            if(add_stopDateInput.getValue() == null)
+            {
+                Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
+                emptyCostAlert.setContentText("Please enter valid dates");
+                emptyCostAlert.show();
+                return true;
+            }
         }
-        if(add_noteInput.getText() == null || add_noteInput.getText().trim().isEmpty())
-        {
-            add_noteInput.setText("");
-        }
+
+        // Note is always optional
 
         return false;
-    }
-
-    @FXML
-    public void testFunction()
-    {
-        System.out.println("HELLO!");
     }
 
     @FXML
@@ -529,6 +540,7 @@ public class Controller implements Initializable
     private void clearButtonAction(ActionEvent event)
     {
         add_nameInput.clear();
+        add_noteInput.clear();
         add_categoryInput.clear();
         add_costInput.clear();
         add_dateInput.getEditor().clear();

@@ -6,7 +6,6 @@ import javafx.collections.transformation.FilteredList;
 
 import java.util.*;
 import java.text.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.io.*;
 
 public class ExpenseList
@@ -129,14 +128,6 @@ public class ExpenseList
                 return false;
         });
         isFiltered = true;
-
-        /*
-        filteredList.clear();
-        for (int i = 0; i < this.getSize(); i++) {
-            if (this.getExpense(i).getDate().after(start) && this.getExpense(i).getDate().before(end)) {
-                filteredList.add(this.getList().get(i));
-            }
-        }*/
     }
 
     public void filterByCost(double min, double max) {
@@ -148,14 +139,6 @@ public class ExpenseList
                 return false;
         });
         isFiltered = true;
-
-        /*
-        filteredList.clear();
-        for (int i = 0; i < this.getSize(); i++) {
-            if (this.getExpense(i).getDate().after(start) && this.getExpense(i).getDate().before(end)) {
-                filteredList.add(this.getList().get(i));
-            }
-        }*/
     }
 
     public void filterByRecurring(boolean recurEnabled) {
@@ -168,14 +151,6 @@ public class ExpenseList
                 return !expense.isScheduled();
         });
         isFiltered = true;
-
-        /*
-        filteredList.clear();
-        for (int i = 0; i < getSize(); i++) {
-            if (this.getExpense(i).isScheduled()) {
-                filteredList.add(getList().get(i));
-            }
-        }//*/
     }
 
     /**
@@ -257,7 +232,7 @@ public class ExpenseList
                 if (recurring)
                     expense = new Expense(name, cost, category, date, endDate, note, frequency);
                 else
-                    expense = new Expense(name, cost, category, date, date, note);
+                    expense = new Expense(name, cost, category, date, note);
 
                 expenseList.addExpense(expense);
             }
@@ -281,7 +256,8 @@ public class ExpenseList
     public void updateScheduledExpenses(Date end){
         Expense hold, e;
         this.filterByRecurring(true);
-        for(int i = 0; i < this.getFilteredList().size(); i++){
+
+        for(int i = 0; i < this.getFilteredList().size(); i++) {
             hold = this.getFilteredList().get(i);
             if(hold.needsUpdate(end)){
                 //Need function that puts lets user confirm stuff
@@ -294,15 +270,6 @@ public class ExpenseList
         }
     }
 
-
-    public void sortByDate() {
-        Collections.sort(list, compareDate);
-    }
-
-    public void sortByDateR() {
-        Collections.sort(list, compareDate.reversed());
-    }
-
     private Comparator<Expense> compareDate = new Comparator<Expense>() {
         public int compare(Expense e1, Expense e2) {
             return e1.getDate().compareTo(e2.getDate());
@@ -313,7 +280,13 @@ public class ExpenseList
     public void sortByAmount() {
         Collections.sort(list, compareAmount);
     }
+    public void sortByDate() {
+        Collections.sort(list, compareDate);
+    }
 
+    public void sortByDateR() {
+        Collections.sort(list, compareDate.reversed());
+    }
     public void sortByAmountR() {
         Collections.sort(list, compareAmount.reversed());
     }
@@ -381,18 +354,4 @@ public class ExpenseList
         }
     }
     */
-
-/*
-    public static void main(String[] args) {
-        Expense e1 = new Expense("Apple", 1.99, "Food", new Date(), "Golden Delicious");
-        Expense e2 = new Expense("Banana", 2.99, "Food", new Date(), "Fruit Salad");
-        Expense e3 = new Expense("Watermelon", 4.99, "Food", new Date(), "Yummy Yummy");
-
-        ExpenseList list = new ExpenseList();
-        list.addExpense(e1);
-        list.addExpense(e2);
-        list.addExpense(e3);
-        System.out.println(list.toString());
-    }
- */
 }

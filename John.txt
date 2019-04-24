@@ -1,0 +1,97 @@
+15
+false
+Coffee
+2.0
+Drink
+Wed Apr 17 00:00:00 EDT 2019
+2 sugars and 2 cremes
+false
+Coffee
+2.0
+Drink
+Thu Apr 18 00:00:00 EDT 2019
+2 sugars and 2 cremes
+false
+Coffee
+2.0
+Drink
+Fri Apr 19 00:00:00 EDT 2019
+2 sugars and 2 cremes
+false
+Coffee
+2.0
+Drink
+Sat Apr 20 00:00:00 EDT 2019
+2 sugars and 2 cremes
+false
+Coffee
+2.0
+Drink
+Sun Apr 21 00:00:00 EDT 2019
+2 sugars and 2 cremes
+false
+Coffee
+2.0
+Drink
+Mon Apr 22 00:00:00 EDT 2019
+2 sugars and 2 cremes
+true
+Coffee
+2.0
+Drink
+Tue Apr 23 00:00:00 EDT 2019
+2 sugars and 2 cremes
+86400000
+Wed Apr 24 00:00:00 EDT 2019
+false
+Martins
+50.0
+Grocery
+Tue Apr 09 00:00:00 EDT 2019
+Bought food
+false
+Netflix
+13.0
+Entertainment
+Sat Feb 16 00:00:00 EST 2019
+
+false
+Netflix
+13.0
+Entertainment
+Mon Mar 18 01:00:00 EDT 2019
+
+true
+Netflix
+13.0
+Entertainment
+Wed Apr 17 01:00:00 EDT 2019
+
+2592000000
+Wed Apr 24 00:00:00 EDT 2019
+false
+Rent
+500.0
+Rent
+Tue Jan 01 00:00:00 EST 2019
+Pay rent
+false
+Rent
+500.0
+Rent
+Thu Jan 31 00:00:00 EST 2019
+Pay rent
+false
+Rent
+500.0
+Rent
+Sat Mar 02 00:00:00 EST 2019
+Pay rent
+true
+Rent
+500.0
+Rent
+Mon Apr 01 01:00:00 EDT 2019
+Pay rent
+2592000000
+Wed Apr 24 00:00:00 EDT 2019
