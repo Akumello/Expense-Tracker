@@ -259,7 +259,9 @@ public class Controller implements Initializable
     {
         String user = settings_usernameField.getText();
 
+        System.out.println(expenseList.toString());
         expenseList.loadUserData(user);
+        System.out.println(expenseList.toString());
         updateTable();
     }
 

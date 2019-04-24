@@ -227,6 +227,7 @@ public class ExpenseList
             for (int i = 0; i < expenseCount; i++)
             {
                 boolean recurring = Boolean.valueOf(input.readLine());
+
                 String name = input.readLine();
                 double cost = Double.valueOf(input.readLine());
                 String category = input.readLine();
@@ -234,13 +235,17 @@ public class ExpenseList
                 String note = input.readLine();
                 long frequency = 0;
                 if (recurring)
+                {
                     frequency = Long.valueOf(input.readLine());
+                }
 
                 Expense expense;
                 if (recurring)
                     expense = new Expense(name, cost, category, date, date, note, frequency);
                 else
                     expense = new Expense(name, cost, category, date, date, note);
+
+                expenseList.addExpense(expense);
             }
 
             input.close();
