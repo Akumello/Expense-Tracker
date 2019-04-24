@@ -123,7 +123,7 @@ public class Controller implements Initializable
         expenseList.clear();
         for (int i = 0; i < 10; i++)
         {
-            Expense randExpense = new Expense("Item"+i, i, "Grocery " + i, new Date(), "A note");
+            Expense randExpense = new Expense("Item"+i, i, "Grocery " + i, new Date(), new Date(), "A note");
             expenseList.addExpense(randExpense);
         }
         //*/
@@ -282,35 +282,48 @@ public class Controller implements Initializable
     @FXML
     private void editAction()
     {
-
         tabPane.getSelectionModel().select(1);
-        /*
+        Expense itemToEdit = null;
         try {
-        Expense itemToEdit = view_tableView.getSelectionModel().getSelectedItem();
-
-        view_tableView.getItems().remove(view_tableView.getSelectionModel().getSelectedIndex());
-
-
-            System.out.println("Bummy");
-        //Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-        String strDate = dateFormat.format(itemToEdit.getDate());
-
-        add_nameInput.setText(itemToEdit.getName());
-        add_categoryInput.setText(itemToEdit.getCategory());
-        add_costInput.setText(Double.toString(itemToEdit.getCost()));
-        add_dateInput.setValue((LOCAL_DATE(strDate)));
-            if(!add_frequencyInput.getText().equals(""))
-            {
-                add_frequencyInput.setText(Long.toString(itemToEdit.getFrequency()));
-            }
+        itemToEdit = view_tableView.getSelectionModel().getSelectedItem();
         }
         catch (Exception ex)
         {
             Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
             emptyCostAlert.setContentText("You must select an item to edit");
             emptyCostAlert.show();
-        }*/
+        }
+        view_tableView.getItems().remove(view_tableView.getSelectionModel().getSelectedIndex());
+
+
+        //Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        Date date = itemToEdit.getDate();
+        Date endDate = itemToEdit.getStopDate();
+
+        // NAME
+        add_nameInput.setText(itemToEdit.getName());
+
+        // CATEGORY
+        add_categoryInput.setText(itemToEdit.getCategory());
+
+        // COST
+        add_costInput.setText(Double.toString(itemToEdit.getCost()));
+
+        // START DATE
+        add_dateInput.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+        // NAME
+        add_noteInput.setText(itemToEdit.getName());
+
+        if(itemToEdit.isScheduled())
+        {
+            add_frequencyInput.setText(Long.toString(TimeUnit.MILLISECONDS.toDays(itemToEdit.getFrequency())));
+
+            // END DATE
+            add_stopDateInput.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+
     }
 
     @FXML
@@ -483,8 +496,9 @@ public class Controller implements Initializable
         expenseList.updateScheduledExpenses();
     }
 
-
-
+    @FXML Tab viewPane;
+    @FXML Tab graphPane;
+    @FXML Tab settingsPane;
     private  SingleSelectionModel<Tab> tabSelector;
 
     private final ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(1);
