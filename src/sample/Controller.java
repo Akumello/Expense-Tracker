@@ -120,11 +120,11 @@ public class Controller implements Initializable
 
 
         // Create a sample expense list and populate it with data
-        /* Then add that sample data to the table for testing
+        //* Then add that sample data to the table for testing
         expenseList.clear();
         for (int i = 0; i < 10; i++)
         {
-            Expense randExpense = new Expense("Item"+i, i, "Grocery " + i, new Date(), "A note");
+            Expense randExpense = new Expense("Item"+i, i, "Grocery " + i, new Date(), new Date(), "A note");
             expenseList.addExpense(randExpense);
         }
         //*/
@@ -283,16 +283,14 @@ public class Controller implements Initializable
     @FXML
     private void editAction()
     {
-
         tabPane.getSelectionModel().select(1);
-        /*
+
         try {
         Expense itemToEdit = view_tableView.getSelectionModel().getSelectedItem();
 
         view_tableView.getItems().remove(view_tableView.getSelectionModel().getSelectedIndex());
 
 
-            System.out.println("Bummy");
         //Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
         String strDate = dateFormat.format(itemToEdit.getDate());
@@ -300,7 +298,7 @@ public class Controller implements Initializable
         add_nameInput.setText(itemToEdit.getName());
         add_categoryInput.setText(itemToEdit.getCategory());
         add_costInput.setText(Double.toString(itemToEdit.getCost()));
-        add_dateInput.setValue((LOCAL_DATE(strDate)));
+        add_dateInput.setValue(java.sql.Date.valueOf(strDate).toLocalDate());
             if(!add_frequencyInput.getText().equals(""))
             {
                 add_frequencyInput.setText(Long.toString(itemToEdit.getFrequency()));
@@ -311,7 +309,7 @@ public class Controller implements Initializable
             Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
             emptyCostAlert.setContentText("You must select an item to edit");
             emptyCostAlert.show();
-        }*/
+        }
     }
 
     @FXML
