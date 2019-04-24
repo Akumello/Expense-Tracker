@@ -325,6 +325,9 @@ public class Controller implements Initializable
     @FXML
     private void editAction()
     {
+
+        add_successfulAdd.setVisible(false);
+        add_unSuccessfulAdd.setVisible(false);
         tabPane.getSelectionModel().select(1);
         Expense itemToEdit = null;
         try {
@@ -410,6 +413,8 @@ public class Controller implements Initializable
                 //timer.schedule(displaySuccessful, 5001);
                 System.out.println("" + expenseList.toString());
             }
+
+            updateTable();
         }
         else
         {
@@ -523,6 +528,10 @@ public class Controller implements Initializable
         add_costInput.clear();
         add_dateInput.getEditor().clear();
         add_frequencyInput.clear();
+        add_stopDateInput.getEditor().clear();
+        add_noteInput.clear();
+        add_successfulAdd.setVisible(false);
+        add_unSuccessfulAdd.setVisible(false);
     }
 
     public void categoryAutoFill()
