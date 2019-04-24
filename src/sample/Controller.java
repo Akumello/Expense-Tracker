@@ -1,4 +1,5 @@
 package sample;
+import java.io.FileNotFoundException;
 import java.net.URL;
 
 import javafx.collections.FXCollections;
@@ -268,6 +269,29 @@ public class Controller implements Initializable
         // Apply filtered list to the table view
         updateTable();
     }
+
+    @FXML TextField settings_usernameField;
+
+    @FXML
+    private void loginButtonAction(ActionEvent event)
+    {
+        String user = settings_usernameField.getText();
+
+        System.out.println(expenseList.toString());
+        expenseList.loadUserData(user);
+        System.out.println(expenseList.toString());
+        updateTable();
+    }
+
+    /**
+     * Saves the user's data to an external file.
+     */
+    @FXML
+    public void saveUserData(ActionEvent event) throws FileNotFoundException
+    {
+        expenseList.saveUserData(settings_usernameField.getText());
+    }
+
     //*/ End Michael
 
 
