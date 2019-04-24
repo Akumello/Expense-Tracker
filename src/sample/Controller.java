@@ -329,10 +329,14 @@ public class Controller implements Initializable
     @FXML
     private void editAction()
     {
-
+        // Clear the add result message
         add_successfulAdd.setVisible(false);
         add_unSuccessfulAdd.setVisible(false);
+
+        // Switch to the add pane
         tabPane.getSelectionModel().select(1);
+
+        // Grab the item that is currently selected
         Expense itemToEdit = null;
         try {
         itemToEdit = view_tableView.getSelectionModel().getSelectedItem();
@@ -343,14 +347,12 @@ public class Controller implements Initializable
             emptyCostAlert.setContentText("You must select an item to edit");
             emptyCostAlert.show();
         }
+
+        // Delete it from the table, so it won't be added a second time
         view_tableView.getItems().remove(view_tableView.getSelectionModel().getSelectedIndex());
 
 
-        //Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-        Date date = itemToEdit.getDate();
-        Date endDate = itemToEdit.getStopDate();
-
+        // Populate the correct data from the selected expense to the correct fields in add
         // NAME
         add_nameInput.setText(itemToEdit.getName());
 
@@ -361,6 +363,7 @@ public class Controller implements Initializable
         add_costInput.setText(Double.toString(itemToEdit.getCost()));
 
         // START DATE
+        Date date = itemToEdit.getDate();
         add_dateInput.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
         // NAME
@@ -368,11 +371,24 @@ public class Controller implements Initializable
 
         if(itemToEdit.isScheduled())
         {
+            // RECURRING
             add_isRecurring.setSelected(true);
+
+            // FREQUENCY
             add_frequencyInput.setText(Long.toString(TimeUnit.MILLISECONDS.toDays(itemToEdit.getFrequency())));
 
             // END DATE
+            Date endDate = itemToEdit.getStopDate();
             add_stopDateInput.setValue(endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+        else
+        {
+            // RECURRING
+            add_isRecurring.setSelected(false);
+
+            // If it is not recurring, then these fields are not applicable
+            add_stopDateInput.setValue(null);
+            add_frequencyInput.setText("");
         }
 
         updateTable();
@@ -389,20 +405,22 @@ public class Controller implements Initializable
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             Date startDate = Date.from(instant);
 
-            // Convert localDate input to util.Date for the end date
-            localDate = add_stopDateInput.getValue();
-            instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-            Date stopDate = Date.from(instant);
-
             // Add an the correct type of expense to the expense list
             if(!add_isRecurring.isSelected())
             {
-                Expense newExpense = new Expense(add_nameInput.getText(), Double.parseDouble(add_costInput.getText()), add_categoryInput.getText(),
-                        startDate, add_noteInput.getText());
-
+                Expense newExpense = new Expense(
+                        add_nameInput.getText(),
+                        Double.parseDouble(add_costInput.getText()),
+                        add_categoryInput.getText(),
+                        startDate,
+                        add_noteInput.getText()
+                );
                 expenseList.addExpense(newExpense);
+
+                // Set the appropriate message
                 add_unSuccessfulAdd.setVisible(false);
                 add_successfulAdd.setVisible(true);
+
                 System.out.println("" + expenseList.toString());
 
                 // For the search feature
@@ -410,15 +428,31 @@ public class Controller implements Initializable
             }
             else
             {
-                Expense newExpense = new Expense(add_nameInput.getText(), Double.parseDouble(add_costInput.getText()), add_categoryInput.getText(),
-                        startDate, stopDate, add_noteInput.getText(), TimeUnit.DAYS.toMillis(Long.parseLong(add_frequencyInput.getText())));
+                // Convert localDate input to util.Date for the end date
+                localDate = add_stopDateInput.getValue();
+                instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+                Date stopDate = Date.from(instant);
 
+                // Make a recurring expense from fields and add it
+                Expense newExpense = new Expense(
+                        add_nameInput.getText(),
+                        Double.parseDouble(add_costInput.getText()),
+                        add_categoryInput.getText(),
+                        startDate,
+                        stopDate,
+                        add_noteInput.getText(),
+                        TimeUnit.DAYS.toMillis(Long.parseLong(add_frequencyInput.getText()))
+                );
                 expenseList.addExpense(newExpense);
+
+                // Set the appropriate message
                 add_unSuccessfulAdd.setVisible(false);
                 add_successfulAdd.setVisible(true);
                 //timer.schedule(displaySuccessful, 5001);
+
                 System.out.println("" + expenseList.toString());
 
+                // For the search feature
                 possibleWords.add(add_categoryInput.getText());
             }
         }
@@ -491,7 +525,7 @@ public class Controller implements Initializable
         }
 
         // Verify that the category input is filled out
-        if(add_categoryInput.getText() == null || add_costInput.getText().trim().isEmpty())
+        if(add_categoryInput.getText() == null || add_categoryInput.getText().trim().isEmpty())
         {
             Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
             emptyCostAlert.setContentText("Please enter category");
