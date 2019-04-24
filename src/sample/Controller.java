@@ -16,9 +16,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import javafx.fxml.Initializable;
@@ -96,6 +99,11 @@ public class Controller implements Initializable
     private Button view_deleteButton;
     @FXML
     private Button view_deleteAllButton;
+    @FXML
+    private Button view_editButton;
+    @FXML
+    private TabPane tabPane;
+
 
     @FXML
     public void updateTable()
@@ -259,10 +267,52 @@ public class Controller implements Initializable
     @FXML private Label add_successfulAdd;
     @FXML private Label add_unSuccessfulAdd;
     @FXML private Label add_frequencyInfo;
+    @FXML private AnchorPane addPane;
+    @FXML private Button editButton;
 
     ArrayList<String> possibleWords = new ArrayList<String>();
 
     Timer timer = new Timer();
+
+    public static final LocalDate LOCAL_DATE (String dateString){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate localDate = LocalDate.parse(dateString, formatter);
+        return localDate;
+    }
+
+    @FXML
+    private void editAction()
+    {
+
+        tabPane.getSelectionModel().select(1);
+        /*
+        try {
+        Expense itemToEdit = view_tableView.getSelectionModel().getSelectedItem();
+
+        view_tableView.getItems().remove(view_tableView.getSelectionModel().getSelectedIndex());
+
+
+            System.out.println("Bummy");
+        //Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        String strDate = dateFormat.format(itemToEdit.getDate());
+
+        add_nameInput.setText(itemToEdit.getName());
+        add_categoryInput.setText(itemToEdit.getCategory());
+        add_costInput.setText(Double.toString(itemToEdit.getCost()));
+        add_dateInput.setValue((LOCAL_DATE(strDate)));
+            if(!add_frequencyInput.getText().equals(""))
+            {
+                add_frequencyInput.setText(Long.toString(itemToEdit.getFrequency()));
+            }
+        }
+        catch (Exception ex)
+        {
+            Alert emptyCostAlert = new Alert(Alert.AlertType.WARNING);
+            emptyCostAlert.setContentText("You must select an item to edit");
+            emptyCostAlert.show();
+        }*/
+    }
 
     @FXML
     private void saveButtonAction(ActionEvent event)
