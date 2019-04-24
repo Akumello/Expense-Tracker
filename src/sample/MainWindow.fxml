@@ -41,9 +41,12 @@
                         <AnchorPane prefHeight="55.0" prefWidth="120.0" />
                         <AnchorPane layoutX="250.0" layoutY="10.0" prefHeight="55.0" prefWidth="120.0">
                            <children>
-                              <Button fx:id="view_deleteButton" layoutY="15.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="26.0" prefWidth="80.0" text="Delete" />
+                              <Button fx:id="view_editButton" layoutX="-8.0" layoutY="14.0" mnemonicParsing="false" onAction="#editAction" prefHeight="26.0" prefWidth="80.0" text="Edit" />
                            </children></AnchorPane>
-                        <AnchorPane layoutX="250.0" layoutY="10.0" prefHeight="55.0" prefWidth="120.0" />
+                        <AnchorPane layoutX="250.0" layoutY="10.0" prefHeight="55.0" prefWidth="120.0">
+                           <children>
+                              <Button fx:id="view_deleteButton" layoutX="-26.0" layoutY="11.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="26.0" prefWidth="80.0" text="Delete" />
+                           </children></AnchorPane>
                      </children>
                   </HBox>
                   <Label layoutX="14.0" layoutY="6.0" text="Filter by: " />
@@ -80,9 +83,9 @@
                </children></AnchorPane>
       </content>
     </Tab>
-      <Tab text="Add">
+      <Tab fx:id="addTab" text="Add">
           <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane fx:id="addPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>
                       <ListView layoutX="14.0" layoutY="14.0" prefHeight="341.0" prefWidth="575.0" />
                       <Button fx:id="button" layoutX="508.0" layoutY="304.0" mnemonicParsing="false" onAction="#saveButtonAction" text="Camera" />
