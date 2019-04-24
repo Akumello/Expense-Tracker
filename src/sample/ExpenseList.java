@@ -39,6 +39,9 @@ public class ExpenseList
     public ObservableList<Expense> getList() {
         return list;
     }
+    public static void setList(ObservableList<Expense> list) {
+        ExpenseList.list = list;
+    }
 
     public ObservableList<Expense> getFilteredList() {
         return filteredList;
@@ -266,7 +269,7 @@ public class ExpenseList
         }
     }
 
-    /*
+
     public void sortByDate() {
         Collections.sort(list, compareDate);
     }
@@ -281,6 +284,7 @@ public class ExpenseList
         }
     };
 
+    /*
     public void sortByAmount() {
         Collections.sort(list, compareAmount);
     }

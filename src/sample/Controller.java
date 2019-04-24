@@ -169,6 +169,18 @@ public class Controller implements Initializable
         // Reveal only the one that has been chosen by the user
         if(view_filterCombo.getValue().equals("No Filter")) {
             expenseList.clearFilter();
+            /*
+            expenseList.sortByDate();
+            Date today = new Date();
+            ObservableList<Expense> holder = expenseList.getList();
+            int i = 0;
+            while(holder.get(i).getDate().before(today)){
+                i++;
+            }
+            holder.remove(i, holder.size());
+            expenseList.setList(holder);
+
+             */
             view_tableView.setItems(expenseList.getList());
             return;
         }
@@ -209,8 +221,14 @@ public class Controller implements Initializable
         // Get the start and end dates from the datepicker control, then filter with them
         Date start = java.sql.Date.valueOf(view_filterStartDate.getValue());
         Date end = java.sql.Date.valueOf(view_filterEndDate.getValue());
+        /*
+        Date today = new Date();
+        ObservableList<Expense> holder = expenseList.getList();
+        if(today.before(end)){
+            expenseList.updateScheduledExpenses(end);
+        }
+         */
         expenseList.filterByDate(start, end);
-
         // Apply filtered list to the table view
         updateTable();
     }
