@@ -98,10 +98,9 @@ public class Expense {
             return s;
     }
 
-    public boolean needsUpdate()
+    public boolean needsUpdate(Date end)
     {
-        Date today = new Date();
-        return today.after(this.getNextOccurrence());
+        return (end.after(this.getNextOccurrence()) && this.nextOccurrence.before(this.stopDate));
     }
 
     public Date getNextOccurrence() {

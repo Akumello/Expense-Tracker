@@ -17,6 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -480,7 +481,8 @@ public class Controller implements Initializable
 
     @FXML
     public void updateButtonEvent(){
-        expenseList.updateScheduledExpenses();
+        expenseList.updateScheduledExpenses(new Date());
+        updateChartByCategory();
     }
 
 
@@ -508,11 +510,12 @@ public class Controller implements Initializable
     @FXML   private NumberAxis y;
     @FXML   private Text total;
 
+    DecimalFormat df = new DecimalFormat("#.##");
+
     private void updateChartByCategory(){
         expenseChart.getData().clear();
         XYChart.Series<String, Double> set = new XYChart.Series<>();
         ArrayList<String> categoriesThatHaveAlreadyBeenComputed = new ArrayList<>();
-        double sumOfSums = 0;
         for(int o = 0; o < expenseList.getList().size(); o++)
         {
             if (! (categoriesThatHaveAlreadyBeenComputed.equals(expenseList.getList().get(o).getCategory()) )){
@@ -521,7 +524,6 @@ public class Controller implements Initializable
                 for (int m = 0; m < expenseList.getFilteredList().size(); m++){
                     sum += expenseList.getFilteredList().get(m).getCost();
                 }
-                sumOfSums += sum;
                 set.getData().add(new XYChart.Data<>(expenseList.getExpense(o).getCategory(), sum));
                 categoriesThatHaveAlreadyBeenComputed.add(expenseList.getExpense(o).getCategory());
                 System.out.println(sum);
@@ -530,7 +532,8 @@ public class Controller implements Initializable
             System.out.println(categoriesThatHaveAlreadyBeenComputed.toString());
         }
         expenseChart.getData().addAll(set);
-        total.setText("$" + sumOfSums);
+        String teal = "$" + df.format(expenseList.calculateTotalExpenses());
+        total.setText(teal);
         expenseList.clearFilter();
     }
     // End Jimmy
