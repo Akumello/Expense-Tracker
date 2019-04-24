@@ -77,6 +77,13 @@ public class Expense {
         return date;
     }
 
+    public Date getStopDate() {
+        return stopDate;
+    }
+    public void setStopDate(Date stopDate) {
+        this.stopDate = stopDate;
+    }
+
     //VERY IMPORTANT FOR TELLING APART NORMAL vs SCHEDULED EXPENSE
     public boolean isScheduled(){
         return this.isScheduled;

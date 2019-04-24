@@ -107,7 +107,7 @@ public class ExpenseList
     public void filterByCategory(String category) {
         filteredList = new FilteredList<>(list, p -> true);
         filteredList.setPredicate(expense -> {
-            if(expense.getCategory().contains(category))
+            if(expense.getCategory().equals(category))
                 return true;
             else
                 return false;
@@ -239,6 +239,16 @@ public class ExpenseList
                 br.close();
             } catch(Exception ex){}
         }
+    }
+
+    public void changeFromRecurring(Expense e){
+        int index = filteredList.indexOf(e);
+        e.setScheduled(false);
+        filteredList.add(index, e);
+    }
+
+    public void addToFiltered(Expense e){
+        filteredList.add(e);
     }
 
     /*
