@@ -68,7 +68,6 @@ public class Controller implements Initializable
         // Load the appropriate expenseList from save data
 
         updateTable();
-
     }
 
     //*/ Michael
@@ -477,27 +476,15 @@ public class Controller implements Initializable
 
 
     //*/ End Genesis
+    @FXML Button updateButton;
 
-    private void updateScheduledExpenses(){
-        Expense hold, e;
-        expenseList.filterByRecurring(true);
-        for(int i = 0; i < expenseList.getFilteredList().size(); i++){
-            hold = expenseList.getFilteredList().get(i);
-            if(hold.needsUpdate()){
-                //Need function that puts lets user confirm stuff
-                e = new Expense(hold.getName(), hold.getCost(), hold.getCategory(), hold.getDate(), hold.getStopDate(), hold.getNote(), hold.getFrequency());
-                //setAddPaneFields(hold);
-                expenseList.addToFiltered(e);
-                expenseList.changeFromRecurring(hold);
-            }
-        }
+    @FXML
+    public void updateButtonEvent(){
+        expenseList.updateScheduledExpenses();
     }
 
-    @FXML TabPane tabPane;
-    @FXML Tab addPane;
-    @FXML Tab viewPane;
-    @FXML Tab graphPane;
-    @FXML Tab settingsPane;
+
+
     private  SingleSelectionModel<Tab> tabSelector;
 
     private final ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(1);

@@ -241,14 +241,30 @@ public class ExpenseList
         }
     }
 
-    public void changeFromRecurring(Expense e){
-        int index = filteredList.indexOf(e);
+    public void changeFromRecurring(int i){
+        Expense e = filteredList.get(i);
         e.setScheduled(false);
-        filteredList.add(index, e);
+        filteredList.remove(i);
+        list.add(e);
     }
 
     public void addToFiltered(Expense e){
         filteredList.add(e);
+    }
+
+    public void updateScheduledExpenses(){
+        Expense hold, e;
+        expenseList.filterByRecurring(true);
+        for(int i = 0; i < expenseList.getFilteredList().size(); i++){
+            hold = expenseList.getFilteredList().get(i);
+            if(hold.needsUpdate()){
+                //Need function that puts lets user confirm stuff
+                e = new Expense(hold.getName(), hold.getCost(), hold.getCategory(), hold.getDate(), hold.getStopDate(), hold.getNote(), hold.getFrequency());
+                //setAddPaneFields(hold);
+                expenseList.addToFiltered(e);
+                expenseList.changeFromRecurring(i);
+            }
+        }
     }
 
     /*
