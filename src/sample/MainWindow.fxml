@@ -142,6 +142,10 @@
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
+                   <Label layoutX="26.0" layoutY="26.0" text="Username: " />
+                   <TextField fx:id="settings_usernameField" layoutX="96.0" layoutY="21.0" />
+                   <Button fx:id="settings_loginButton" layoutX="93.0" layoutY="61.0" mnemonicParsing="false" onAction="#loginButtonAction" text="Load" />
+                   <Button layoutX="26.0" layoutY="61.0" mnemonicParsing="false" onAction="#saveUserData" text="Save" />
                   <Button fx:id="updateButton" layoutX="46.0" layoutY="53.0" mnemonicParsing="false" onAction="#updateButtonEvent" text="Update" />
                </children></AnchorPane>
          </content>
