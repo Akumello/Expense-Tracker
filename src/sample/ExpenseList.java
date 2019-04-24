@@ -181,7 +181,7 @@ public class ExpenseList
     public double calculateTotalExpenses() {
         double total_cost = 0.00; //initializes total cost as $0.00
 
-        for (int i = 0; i < getSize(); i++) { //for each expense in the expense list
+        for (int i = 0; i < list.size(); i++) { //for each expense in the expense list
             total_cost += getExpense(i).getCost(); //add each amount to the total cost
         }
 
@@ -242,27 +242,26 @@ public class ExpenseList
     }
 
     public void changeFromRecurring(int i){
-        Expense e = filteredList.get(i);
-        e.setScheduled(false);
-        filteredList.remove(i);
-        list.add(e);
+        filteredList.get(i).setScheduled(false);
     }
 
-    public void addToFiltered(Expense e){
-        filteredList.add(e);
+    public boolean addToFiltered(Expense e){
+        return filteredList.add(e);
     }
 
-    public void updateScheduledExpenses(){
+    //Takes end date as input
+    public void updateScheduledExpenses(Date end){
         Expense hold, e;
-        expenseList.filterByRecurring(true);
-        for(int i = 0; i < expenseList.getFilteredList().size(); i++){
-            hold = expenseList.getFilteredList().get(i);
-            if(hold.needsUpdate()){
+        this.filterByRecurring(true);
+        for(int i = 0; i < this.getFilteredList().size(); i++){
+            hold = this.getFilteredList().get(i);
+            if(hold.needsUpdate(end)){
                 //Need function that puts lets user confirm stuff
-                e = new Expense(hold.getName(), hold.getCost(), hold.getCategory(), hold.getDate(), hold.getStopDate(), hold.getNote(), hold.getFrequency());
+                e = new Expense(hold.getName(), hold.getCost(), hold.getCategory(), hold.getNextOccurrence(), hold.getStopDate(), hold.getNote(), hold.getFrequency());
                 //setAddPaneFields(hold);
-                expenseList.addToFiltered(e);
-                expenseList.changeFromRecurring(i);
+                this.addExpense(e);
+                this.changeFromRecurring(i);
+                updateScheduledExpenses(end);
             }
         }
     }
