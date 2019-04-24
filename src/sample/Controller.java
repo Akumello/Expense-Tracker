@@ -120,7 +120,7 @@ public class Controller implements Initializable
 
 
         // Create a sample expense list and populate it with data
-        //* Then add that sample data to the table for testing
+        /* Then add that sample data to the table for testing
         expenseList.clear();
         for (int i = 0; i < 10; i++)
         {
@@ -284,25 +284,9 @@ public class Controller implements Initializable
     private void editAction()
     {
         tabPane.getSelectionModel().select(1);
-
+        Expense itemToEdit = null;
         try {
-        Expense itemToEdit = view_tableView.getSelectionModel().getSelectedItem();
-
-        view_tableView.getItems().remove(view_tableView.getSelectionModel().getSelectedIndex());
-
-
-        //Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-        String strDate = dateFormat.format(itemToEdit.getDate());
-
-        add_nameInput.setText(itemToEdit.getName());
-        add_categoryInput.setText(itemToEdit.getCategory());
-        add_costInput.setText(Double.toString(itemToEdit.getCost()));
-        add_dateInput.setValue(java.sql.Date.valueOf(strDate).toLocalDate());
-            if(!add_frequencyInput.getText().equals(""))
-            {
-                add_frequencyInput.setText(Long.toString(itemToEdit.getFrequency()));
-            }
+        itemToEdit = view_tableView.getSelectionModel().getSelectedItem();
         }
         catch (Exception ex)
         {
@@ -310,6 +294,37 @@ public class Controller implements Initializable
             emptyCostAlert.setContentText("You must select an item to edit");
             emptyCostAlert.show();
         }
+        view_tableView.getItems().remove(view_tableView.getSelectionModel().getSelectedIndex());
+
+
+        //Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        Date date = itemToEdit.getDate();
+        Date endDate = itemToEdit.getStopDate();
+
+        // NAME
+        add_nameInput.setText(itemToEdit.getName());
+
+        // CATEGORY
+        add_categoryInput.setText(itemToEdit.getCategory());
+
+        // COST
+        add_costInput.setText(Double.toString(itemToEdit.getCost()));
+
+        // START DATE
+        add_dateInput.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+        // NAME
+        add_noteInput.setText(itemToEdit.getName());
+
+        if(itemToEdit.isScheduled())
+        {
+            add_frequencyInput.setText(Long.toString(TimeUnit.MILLISECONDS.toDays(itemToEdit.getFrequency())));
+
+            // END DATE
+            add_stopDateInput.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
+
     }
 
     @FXML
