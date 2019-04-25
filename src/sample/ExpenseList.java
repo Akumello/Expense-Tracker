@@ -199,7 +199,10 @@ public class ExpenseList
      */
     public void loadUserData(String user)
     {
+        // Clear out the current list
         clear();
+
+        // Set up reader to read from the user's file
         BufferedReader input = null;
         try {
             input = new BufferedReader(new FileReader(user + ".txt"));
@@ -207,34 +210,39 @@ public class ExpenseList
 
         try
         {
+            // Read the number of expenses in the file
             int expenseCount = Integer.valueOf(input.readLine());
             for (int i = 0; i < expenseCount; i++)
             {
-                boolean recurring = Boolean.valueOf(input.readLine());
+                // Location for the data to come into
+                Expense loadedExpense;
 
+                // Used to help convert the date string to a date object
+                DateFormat dateFormat = new SimpleDateFormat("E MMM dd hh:mm:ss ZZZ yyyy");
+
+                // Bring each line in as the appropriate variable
+                boolean recurring = Boolean.valueOf(input.readLine());
                 String name = input.readLine();
                 double cost = Double.valueOf(input.readLine());
                 String category = input.readLine();
-
-                DateFormat dateFormat = new SimpleDateFormat("E MMM dd hh:mm:ss ZZZ yyyy");
-
                 Date date = dateFormat.parse(input.readLine());
                 Date endDate = null;
                 String note = input.readLine();
+
                 long frequency = 0;
                 if (recurring)
                 {
+                    // Bring each line in as the appropriate variable
                     frequency = Long.valueOf(input.readLine());
                     endDate = dateFormat.parse(input.readLine());
+
+                    // Construct the object
+                    loadedExpense = new Expense(name, cost, category, date, endDate, note, frequency);
                 }
-
-                Expense expense;
-                if (recurring)
-                    expense = new Expense(name, cost, category, date, endDate, note, frequency);
                 else
-                    expense = new Expense(name, cost, category, date, note);
+                    loadedExpense = new Expense(name, cost, category, date, note);
 
-                expenseList.addExpense(expense);
+                expenseList.addExpense(loadedExpense);
             }
 
             input.close();

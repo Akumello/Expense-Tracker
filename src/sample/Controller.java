@@ -146,11 +146,7 @@ public class Controller implements Initializable
     private void deleteItem()
     {
         try {
-            Expense itemToDelete = view_tableView.getSelectionModel().getSelectedItem();
-
             view_tableView.getItems().remove(view_tableView.getSelectionModel().getSelectedIndex());
-
-            System.out.println(expenseList.toString());
         }
         catch (Exception e)
         {
@@ -174,6 +170,7 @@ public class Controller implements Initializable
         // Reveal only the one that has been chosen by the user
         if(view_filterCombo.getValue().equals("No Filter")) {
             expenseList.clearFilter();
+
             /*
             expenseList.sortByDate();
             Date today = new Date();
@@ -184,8 +181,8 @@ public class Controller implements Initializable
             }
             holder.remove(i, holder.size());
             expenseList.setList(holder);
-
              */
+
             view_tableView.setItems(expenseList.getList());
             return;
         }
@@ -280,11 +277,12 @@ public class Controller implements Initializable
     private void loginButtonAction(ActionEvent event)
     {
         String user = settings_usernameField.getText();
-
-        System.out.println(expenseList.toString());
         expenseList.loadUserData(user);
-        System.out.println(expenseList.toString());
+
         updateTable();
+
+        // Switch to the add pane
+        tabPane.getSelectionModel().select(0);
     }
 
     /**
@@ -294,6 +292,9 @@ public class Controller implements Initializable
     public void saveUserData(ActionEvent event) throws FileNotFoundException
     {
         expenseList.saveUserData(settings_usernameField.getText());
+
+        // Switch to the add pane
+        tabPane.getSelectionModel().select(0);
     }
 
     //*/ End Michael
@@ -313,6 +314,8 @@ public class Controller implements Initializable
     @FXML private Label add_successfulAdd;
     @FXML private Label add_unSuccessfulAdd;
     @FXML private Label add_frequencyInfo;
+    @FXML private Label add_frequencyLabel;
+    @FXML private Label add_stopDateLabel;
     @FXML private AnchorPane addPane;
     @FXML private Button editButton;
 
@@ -556,17 +559,25 @@ public class Controller implements Initializable
     }
 
     @FXML
-    private void toggleFrequency()
+    private void toggleRecurring()
     {
         if(add_isRecurring.isSelected())
         {
             add_frequencyInfo.setVisible(true);
             add_frequencyInput.setVisible(true);
+            add_frequencyLabel.setVisible(true);
+            add_stopDateInput.setVisible(true);
+            add_stopDateLabel.setVisible(true);
         }
         else
         {
+            add_frequencyInput.setText("");
+            add_stopDateInput.setValue(null);
             add_frequencyInfo.setVisible(false);
             add_frequencyInput.setVisible(false);
+            add_frequencyLabel.setVisible(false);
+            add_stopDateInput.setVisible(false);
+            add_stopDateLabel.setVisible(false);
         }
     }
 
