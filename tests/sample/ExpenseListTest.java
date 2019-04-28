@@ -74,4 +74,11 @@ class ExpenseListTest {
         eList.clearFilter();
         assertEquals(16, eList.getSize());
     }
+
+    @Test
+    public void testLoadUserData() {
+        eList.loadUserData("Test");
+        assertEquals(4, eList.getSize());
+        assertEquals(50.0, eList.getExpense(1).getCost());
+    }
 }
